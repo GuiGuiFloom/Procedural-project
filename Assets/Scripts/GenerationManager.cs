@@ -8,7 +8,7 @@ using UnityEngine.UI; // permet d'utiliser une référence "Silder"
 public class GenerationManager : MonoBehaviour
 {
     [SerializeField] Transform WorldGrid; // Référence au WorldGrid qui est le parent des "rooms"
-    [SerializeField] GameObject TypeRoom; // Le prefab qui spawn dans notre monde
+    [SerializeField] List<GameObject> TypesRoom; // Une Liste qui nous permet aux scripts de choisr aléatoirement les prefabs
     [SerializeField] int tailleCarte = 16; // Ceci est la taille de la carte, le chiffre choisi doit avoir obligatoirement une racine carré entier
     [SerializeField] Slider TailleCarteSlider;
     [SerializeField] Button GenerateButton;
@@ -16,7 +16,7 @@ public class GenerationManager : MonoBehaviour
 
     private Vector3 positionAct; // La position actuelle de la "room" ou elle doit être généré
     private int positionActX, positionActZ, posActTracker; // Ceci permettra de tracker la position de la "room" ou elle est généré
-    private int tailleRoom = 7; // la valeur x et y des cubes
+    public float tailleRoom = 7; // la valeur x et y des cubes
 
 
     public void Update()
@@ -42,17 +42,17 @@ public class GenerationManager : MonoBehaviour
                 positionActX = 0;
                 posActTracker = 0;
 
-                positionActZ += tailleRoom;
+                positionActZ += (int)tailleRoom;
 
                 
             }
 
             positionAct = new(positionActX, 0, positionActZ);
 
-            Instantiate(TypeRoom, positionAct, Quaternion.identity, WorldGrid); // Instantie les type de room à positionAct. (position actuelle)
+            Instantiate(TypesRoom[Random.Range(0, TypesRoom.Count)], positionAct, Quaternion.identity, WorldGrid); // Instantie les type de room à positionAct. (position actuelle)
 
             posActTracker ++; // traque la position X sans utiliser les tailles des room
-            positionActX += tailleRoom; // Ajoute plus de position à postionActX. (position actuelle sur l'axe X), déplaçent la position sur la droite
+            positionActX += (int)tailleRoom; // Ajoute plus de position à postionActX. (position actuelle sur l'axe X), déplaçent la position sur la droite
 
 
         }
