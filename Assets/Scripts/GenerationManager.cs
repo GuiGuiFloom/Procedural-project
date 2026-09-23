@@ -10,8 +10,10 @@ public class GenerationManager : MonoBehaviour
     [SerializeField] Transform WorldGrid; // Référence au WorldGrid qui est le parent des "rooms"
     [SerializeField] List<GameObject> TypesRoom; // Une Liste qui nous permet aux scripts de choisr aléatoirement les prefabs
     [SerializeField] int tailleCarte = 16; // Ceci est la taille de la carte, le chiffre choisi doit avoir obligatoirement une racine carré entier
-    [SerializeField] Slider TailleCarteSlider;
+    [SerializeField] Slider TailleCarteSlider, VideSlider;
     [SerializeField] Button GenerateButton;
+    [SerializeField] GameObject E_Room; // Le type "room" vide (la salle vide)
+    public int carteEmptiness; // La chance pour qu'un E_Room spawn, c'est pour contrôler a quel point la carte est vide ou dense
     private int tailleCarteCarré; // La racine caré de la taille de la carte
 
     private Vector3 positionAct; // La position actuelle de la "room" ou elle doit être généré
@@ -24,6 +26,8 @@ public class GenerationManager : MonoBehaviour
         tailleCarte = ((int)Mathf.Pow(TailleCarteSlider.value, 4)); // Ceci est pour assurer que notre valeur sera toujours au carré
         
         tailleCarteCarré = ((int)Mathf.Sqrt(tailleCarte)); // cette variable nous permet d'avoir en permanence la racine carré de la taille de la carte en int pour eviter de crash
+
+        carteEmptiness = (int)VideSlider.value;
     }
 
     public void RechargeMonde() // Recharge le monde pour qu'on puisse en faire un nouveau
@@ -33,6 +37,11 @@ public class GenerationManager : MonoBehaviour
 
     public void GenerationMonde() // Génére des mondes quand ceci est clliqué
     {
+       for (int i = 0; i < carteEmptiness; i++)
+        {
+            TypesRoom.Add(E_Room); // ajoute des "room" vide aux TypesRoom array (a la liste des types de salles)
+        }
+        
         GenerateButton.interactable = false; // Sert à empêcher de généré infiniment le monde
 
         for (int i = 0; i < tailleCarte; i++)
