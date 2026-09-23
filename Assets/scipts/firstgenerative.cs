@@ -5,12 +5,13 @@ public class firstgenerative : MonoBehaviour
 
     public GameObject ground;
     public GameObject ground2;
+    public GameObject wall;
     Vector3 wallspawn;
 
 
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    void Start() 
     {
 
 
@@ -26,11 +27,11 @@ public class firstgenerative : MonoBehaviour
 
     private void generateGround()
     {
-        for (int i = 0; i < 100; i++)
+        for (int i = 0; i < 10; i++)
         {
 
             //. permettre avec du random d'instancier des grounds avec differents etats (ground, ground2)
-            for (int j = 0; j < 100; j++)
+            for (int j = 0; j < 10; j++)
             {
                 int probaGrnd = Random.Range(0, 10);
 
@@ -51,7 +52,7 @@ public class firstgenerative : MonoBehaviour
         }
     }
 
-    private static void generateWall()
+    private void generateWall()
     {
         //.  creer des murs si l'etat du ground est = ground2, si le GO est ground2 instancie un mur sinon ne rien faire
 
@@ -60,15 +61,16 @@ public class firstgenerative : MonoBehaviour
         ground[] grounds = GameObject.FindObjectsByType<ground>();
 
         //.verifie chaques ground pour chaque ground instancier(10000)
-        for (int g = 0; g < 10000; g++) 
+        for (int g = 0; g < 1000; g++) 
         {
             GameObject truc = grounds[g].gameObject;
             Debug.Log(g);
 
-            if (truc.GetComponent<ground>().type == global::ground.typeGround.ROUGE) ;
+            //. si le ground instancier est de type.rouge instancier un wall
+            if (truc.GetComponent<ground>().type == global::ground.typeGround.ROUGE) 
             {
                 Debug.Log("je suis rouge bitch");
-                Instantiate
+                Instantiate(wall, new Vector3(truc.transform.position.x, 2, truc.transform.position.z), Quaternion.identity);
             }
         }
 

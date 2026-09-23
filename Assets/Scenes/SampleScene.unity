@@ -1059,6 +1059,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::firstgenerative
   ground: {fileID: 476811038}
   ground2: {fileID: 1868872865}
+  wall: {fileID: 1672478150}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
