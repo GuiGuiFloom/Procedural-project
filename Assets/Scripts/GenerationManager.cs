@@ -1,33 +1,60 @@
 using UnityEngine;
 using UnityEngine.SceneManagement; // Permet d'avoir une autre méthode "RechargeMonde"
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine.UI; // permet d'utiliser une référence "Silder"
+
 
 public class GenerationManager : MonoBehaviour
 {
     [SerializeField] Transform WorldGrid; // Référence au WorldGrid qui est le parent des "rooms"
-    [SerializeField] GameObject RoomPrefab;
-    public int tailleCarte = 16; // Ceci est la taille de la carte, le chiffre choisi doit avoir obligatoirement une racine carré entier
+    [SerializeField] GameObject TypeRoom; // Le prefab qui spawn dans notre monde
+    [SerializeField] int tailleCarte = 16; // Ceci est la taille de la carte, le chiffre choisi doit avoir obligatoirement une racine carré entier
+    [SerializeField] Slider TailleCarteSlider;
+    [SerializeField] Button GenerateButton;
     private int tailleCarteCarré; // La racine caré de la taille de la carte
 
     private Vector3 positionAct; // La position actuelle de la "room" ou elle doit être généré
-    private int positionActX, positionActZ; // Ceci permettra de tracker la position de la "room" ou elle est généré
-    private int posTracker; // Garde la position de notre générateur
+    private int positionActX, positionActZ, posActTracker; // Ceci permettra de tracker la position de la "room" ou elle est généré
+    private int tailleRoom = 7; // la valeur x et y des cubes
+
 
     public void Update()
     {
+        tailleCarte = ((int)Mathf.Pow(TailleCarteSlider.value, 4)); // Ceci est pour assurer que notre valeur sera toujours au carré
+        
         tailleCarteCarré = ((int)Mathf.Sqrt(tailleCarte)); // cette variable nous permet d'avoir en permanence la racine carré de la taille de la carte en int pour eviter de crash
     }
 
     public void RechargeMonde() // Recharge le monde pour qu'on puisse en faire un nouveau
     {
-        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name); // recharge la scène actuellement chargés 
     }
 
     public void GenerationMonde() // Génére des mondes quand ceci est clliqué
     {
+        GenerateButton.interactable = false; // Sert à empêcher de généré infiniment le monde
+
         for (int i = 0; i < tailleCarte; i++)
         {
+            if (posActTracker == tailleCarteCarré) // Permet de ramener la position sur le grid au début pour qu'il puisse aller au dessus
+            {
+                positionActX = 0;
+                posActTracker = 0;
 
-            Instantiate(RoomPrefab, positionAct, Quaternion.identity, WorldGrid); // il va créer des rooms par rapport à la valeur dans "tailleCarte"
+                positionActZ += tailleRoom;
+
+                
+            }
+
+            positionAct = new(positionActX, 0, positionActZ);
+
+            Instantiate(TypeRoom, positionAct, Quaternion.identity, WorldGrid); // Instantie les type de room à positionAct. (position actuelle)
+
+            posActTracker ++; // traque la position X sans utiliser les tailles des room
+            positionActX += tailleRoom; // Ajoute plus de position à postionActX. (position actuelle sur l'axe X), déplaçent la position sur la droite
+
+
         }
     }
 }
