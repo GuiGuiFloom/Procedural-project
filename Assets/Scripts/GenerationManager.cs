@@ -11,7 +11,9 @@ public enum GenerationState
     GenerationsLumière,
 
     GenerationSpawn,
-    GenerationExit
+    GenerationExit,
+
+    GenerationBarriere
 }
 public class GenerationManager : MonoBehaviour
 {
@@ -23,7 +25,7 @@ public class GenerationManager : MonoBehaviour
     [SerializeField] Slider TailleCarteSlider, VideSlider, LuminositeSlider;
     [SerializeField] Button GenerateButton;
     [SerializeField] GameObject E_Room; // Le type "room" vide (la salle vide)
-    [SerializeField] GameObject B_Room; // La Barrière
+    [SerializeField] GameObject B_Room; // Le type "room" Barrière
     [SerializeField] GameObject SpawnRoom, ExitRoom;
     public List<GameObject> GeneratedRooms; // Stock les salles qui sont déja généré
 
@@ -35,7 +37,7 @@ public class GenerationManager : MonoBehaviour
     private int tailleCarteCarré; // La racine caré de la taille de la carte
 
     private Vector3 positionAct; // La position actuelle de la "room" ou elle doit être généré
-    private int positionActX, positionActZ, posActTracker; // Ceci permettra de tracker la position de la "room" ou elle est généré
+    private int positionActX, positionActZ, posActTracker, roomAct; // Ceci permettra de tracker la position de la "room" ou elle est généré
     public float tailleRoom = 7; // la valeur x et y des cubes
     public GenerationState currentState; // L'état actuel de la génération
 
@@ -69,16 +71,20 @@ public class GenerationManager : MonoBehaviour
         GenerateButton.interactable = false; // Sert à empêcher de généré infiniment le monde
 
 
-        for (int state = 0; state < 5; state++)
+        for (int state = 0; state < 6; state++)
         {
             for (int i = 0; i < tailleCarte; i++)
             {
                 if (posActTracker == tailleCarteCarré) // Permet de ramener la position sur le grid au début pour qu'il puisse aller au dessus
                 {
+                    if (currentState == GenerationState.GenerationBarriere) GenerationBarriere(); // fait apparaitre des barrière a la droite de la carte
+                    
                     positionActX = 0;
                     posActTracker = 0;
 
                     positionActZ += (int)tailleRoom;
+
+                    if (currentState == GenerationState.GenerationBarriere) GenerationBarriere(); // fait apparaitre des barrière a la gauche de la carte
 
 
                 }
@@ -101,8 +107,27 @@ public class GenerationManager : MonoBehaviour
 
                         break;
 
+
+                    case GenerationState.GenerationBarriere:
+
+                        if (roomAct <= tailleCarteCarré && roomAct >= 0)
+
+                        {
+                            GenerationBarriere(); // dessous de la carte
+                        }
+
+                        if (roomAct <= tailleCarteCarré && roomAct >= tailleCarte - tailleCarteCarré)
+
+                        {
+                            GenerationBarriere(); // dessus de la carte
+                        }
+
+                        break;
                 }
 
+
+
+                roomAct++;
                 posActTracker++; // traque la position X sans utiliser les tailles des room
                 positionActX += (int)tailleRoom; // Ajoute plus de position à postionActX. (position actuelle sur l'axe X), déplaçent la position sur la droite
 
@@ -173,6 +198,8 @@ public class GenerationManager : MonoBehaviour
 
 
         // Reset nos variables
+        roomAct = 0;
+
         positionActX = 0;
         positionActZ = 0;
         positionAct = Vector3.zero;
@@ -192,4 +219,11 @@ public class GenerationManager : MonoBehaviour
         Debug.Log("Le Joueur est sorti et à réussi");
     }
 
+
+    public void GenerationBarriere() // genère la "room" barrière à la position actuelle
+    {
+        positionAct = new(positionActX, 0, positionActZ);
+
+        Instantiate(B_Room, positionAct, Quaternion.identity, WorldGrid);
+    }
 }

@@ -2368,7 +2368,7 @@ MonoBehaviour:
   LuminositeSlider: {fileID: 1405177007}
   GenerateButton: {fileID: 1731597215}
   E_Room: {fileID: 3291775479710522400, guid: e027a32d416028d40a7e55666d04eb21, type: 3}
-  B_Room: {fileID: 0}
+  B_Room: {fileID: 3291775479710522400, guid: bfc68ed84c1a4fb4bb33329fca3ded31, type: 3}
   SpawnRoom: {fileID: 3291775479710522400, guid: db7e9db0775b49944b17292be10b6759, type: 3}
   ExitRoom: {fileID: 3291775479710522400, guid: 8988967c1986e97479df96204fb63dda, type: 3}
   GeneratedRooms: []
