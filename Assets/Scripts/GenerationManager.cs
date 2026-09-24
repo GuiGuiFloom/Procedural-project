@@ -1,7 +1,7 @@
-using UnityEngine;
-using UnityEngine.SceneManagement; // Permet d'avoir une autre méthode "RechargeMonde"
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.SceneManagement; // Permet d'avoir une autre méthode "RechargeMonde"
 using UnityEngine.UI; // permet d'utiliser une référence "Silder"
 
 public enum GenerationState
@@ -25,6 +25,8 @@ public class GenerationManager : MonoBehaviour
     [SerializeField] GameObject E_Room; // Le type "room" vide (la salle vide)
     [SerializeField] GameObject SpawnRoom, ExitRoom;
     public List<GameObject> GeneratedRooms; // Stock les salles qui sont déja généré
+
+    [SerializeField] GameObject PlayerObject, MainCameraObject;
 
     [Header("Paramètre")]
     public int carteEmptiness; // La chance pour qu'un E_Room spawn, c'est pour contrôler a quel point la carte est vide ou dense
@@ -123,7 +125,7 @@ public class GenerationManager : MonoBehaviour
 
                     int _roomToReplace = Random.Range(0, GeneratedRooms.Count);
 
-                    GameObject spawnRoom = Instantiate(SpawnRoom, GeneratedRooms[_roomToReplace].transform.position, Quaternion.identity, WorldGrid);
+                    spawnRoom = Instantiate(SpawnRoom, GeneratedRooms[_roomToReplace].transform.position, Quaternion.identity, WorldGrid);
 
                     Destroy(GeneratedRooms[_roomToReplace]);
 
@@ -145,6 +147,21 @@ public class GenerationManager : MonoBehaviour
     
     }
 
+
+    public GameObject spawnRoom;
+
+    public void SpawnPlayer() // Le GameObject Joueur est désactiver puis réactivé par le bouton "spawn"
+    {
+        PlayerObject.SetActive(false);
+        
+        PlayerObject.transform.position = new Vector3(spawnRoom.transform.position.x, 1.8f, spawnRoom.transform.position.z);
+        
+        PlayerObject.SetActive(true);
+        MainCameraObject.SetActive(false);
+
+    }
+
+
     public void NextState()
     {
         currentState++; // va à l'état suivant
@@ -157,4 +174,16 @@ public class GenerationManager : MonoBehaviour
         posActTracker = 0;
     }
 
+
+    public void WinGame() // Quand le joueur touche l'exit il gagne
+    {
+        MainCameraObject.SetActive (true); // Réactive la caméra
+        PlayerObject.SetActive (false); // désactive le joueur
+
+        Cursor.lockState = CursorLockMode.None; 
+        // fait réapparaitre le curseur
+        Cursor.visible = true;
+
+        Debug.Log("Le Joueur est sorti et à réussi");
+    }
 }
