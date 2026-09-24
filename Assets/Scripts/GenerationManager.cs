@@ -23,6 +23,7 @@ public class GenerationManager : MonoBehaviour
     [SerializeField] Slider TailleCarteSlider, VideSlider, LuminositeSlider;
     [SerializeField] Button GenerateButton;
     [SerializeField] GameObject E_Room; // Le type "room" vide (la salle vide)
+    [SerializeField] GameObject B_Room; // La Barrière
     [SerializeField] GameObject SpawnRoom, ExitRoom;
     public List<GameObject> GeneratedRooms; // Stock les salles qui sont déja généré
 
@@ -48,6 +49,9 @@ public class GenerationManager : MonoBehaviour
         carteEmptiness = (int)VideSlider.value;
 
         carteLuminosité = (int)LuminositeSlider.value;
+
+       
+
     }
 
     public void RechargeMonde() // Recharge le monde pour qu'on puisse en faire un nouveau
@@ -67,43 +71,43 @@ public class GenerationManager : MonoBehaviour
 
         for (int state = 0; state < 5; state++)
         {
-              for (int i = 0; i < tailleCarte; i++)
-        {
-            if (posActTracker == tailleCarteCarré) // Permet de ramener la position sur le grid au début pour qu'il puisse aller au dessus
+            for (int i = 0; i < tailleCarte; i++)
             {
-                positionActX = 0;
-                posActTracker = 0;
+                if (posActTracker == tailleCarteCarré) // Permet de ramener la position sur le grid au début pour qu'il puisse aller au dessus
+                {
+                    positionActX = 0;
+                    posActTracker = 0;
 
-                positionActZ += (int)tailleRoom;
+                    positionActZ += (int)tailleRoom;
 
+
+                }
+
+                positionAct = new(positionActX, 0, positionActZ);
+
+
+
+                switch (currentState) // il va générer soit les "rooms", soit les lumières qui carie en fonction de l'état de la génération
+                {
+                    case GenerationState.GenerationRooms:
+                        GeneratedRooms.Add(Instantiate(TypesRoom[Random.Range(0, TypesRoom.Count)], positionAct, Quaternion.identity, WorldGrid)); // Instantie les type de room à positionAct. (position actuelle)
+                        break;
+
+                    case GenerationState.GenerationsLumière:
+                        int lumièreSpawn = Random.Range(-1, carteLuminosité);
+
+                        if (lumièreSpawn == 0)
+                            Instantiate(TypesLumière[Random.Range(0, TypesLumière.Count)], positionAct, Quaternion.identity, WorldGrid); // Instantie les type de room à positionAct. (position actuelle)
+
+                        break;
+
+                }
+
+                posActTracker++; // traque la position X sans utiliser les tailles des room
+                positionActX += (int)tailleRoom; // Ajoute plus de position à postionActX. (position actuelle sur l'axe X), déplaçent la position sur la droite
 
             }
 
-            positionAct = new(positionActX, 0, positionActZ);
-
-
-
-            switch (currentState) // il va générer soit les "rooms", soit les lumières qui carie en fonction de l'état de la génération
-            {
-                case GenerationState.GenerationRooms:
-                    GeneratedRooms.Add (Instantiate(TypesRoom[Random.Range(0, TypesRoom.Count)], positionAct, Quaternion.identity, WorldGrid)); // Instantie les type de room à positionAct. (position actuelle)
-                    break;
-
-                case GenerationState.GenerationsLumière:
-                    int lumièreSpawn = Random.Range(-1, carteLuminosité);
-
-                    if (lumièreSpawn == 0)
-                        Instantiate(TypesLumière[Random.Range(0, TypesLumière.Count)], positionAct, Quaternion.identity, WorldGrid); // Instantie les type de room à positionAct. (position actuelle)
-
-                    break;
-
-            }
-
-            posActTracker++; // traque la position X sans utiliser les tailles des room
-            positionActX += (int)tailleRoom; // Ajoute plus de position à postionActX. (position actuelle sur l'axe X), déplaçent la position sur la droite
-
-            }
-        
             NextState();
             // gère le spawn room et l'exitroom, qui ne dépend pas du world grid, mais de la position de salle qui va remplacer.
 
@@ -118,7 +122,7 @@ public class GenerationManager : MonoBehaviour
                     Destroy(GeneratedRooms[roomToReplace]);
 
                     GeneratedRooms[roomToReplace] = exitRoom;
-                    
+
                     break;
 
                 case GenerationState.GenerationSpawn: // va choisir une "room" alétoire généré puis la détruire pour la remplacer par une spawn room
@@ -132,8 +136,8 @@ public class GenerationManager : MonoBehaviour
                     GeneratedRooms[_roomToReplace] = spawnRoom;
 
                     break;
-            
-            
+
+
             }
 
 
@@ -141,10 +145,10 @@ public class GenerationManager : MonoBehaviour
 
 
 
-        } 
+        }
 
 
-    
+
     }
 
 
@@ -152,10 +156,11 @@ public class GenerationManager : MonoBehaviour
 
     public void SpawnPlayer() // Le GameObject Joueur est désactiver puis réactivé par le bouton "spawn"
     {
-        PlayerObject.SetActive(false);
-        
+        //PlayerObject.SetActive(false);
+
+
         PlayerObject.transform.position = new Vector3(spawnRoom.transform.position.x, 1.8f, spawnRoom.transform.position.z);
-        
+
         PlayerObject.SetActive(true);
         MainCameraObject.SetActive(false);
 
@@ -177,13 +182,14 @@ public class GenerationManager : MonoBehaviour
 
     public void WinGame() // Quand le joueur touche l'exit il gagne
     {
-        MainCameraObject.SetActive (true); // Réactive la caméra
-        PlayerObject.SetActive (false); // désactive le joueur
+        MainCameraObject.SetActive(true); // Réactive la caméra
+        PlayerObject.SetActive(false); // désactive le joueur
 
-        Cursor.lockState = CursorLockMode.None; 
+        Cursor.lockState = CursorLockMode.None;
         // fait réapparaitre le curseur
         Cursor.visible = true;
 
         Debug.Log("Le Joueur est sorti et à réussi");
     }
+
 }
