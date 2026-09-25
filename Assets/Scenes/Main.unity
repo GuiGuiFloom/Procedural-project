@@ -2354,12 +2354,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::GenerationManager
   WorldGrid: {fileID: 430459819}
   TypesRoom:
-  - {fileID: 3291775479710522400, guid: 38d397f3335c802499b8b62cb2d35f2b, type: 3}
-  - {fileID: 3291775479710522400, guid: 9fbbc242a44413c46a71d2a3edfd8e7a, type: 3}
-  - {fileID: 3291775479710522400, guid: 7724b43f4b88fcc4f874a220842fa5d7, type: 3}
-  - {fileID: 3291775479710522400, guid: d2c4a2c79d2f80f409e7cec2d27f6cc5, type: 3}
-  - {fileID: 3291775479710522400, guid: 783f7d5902062c9429052a1235c168c3, type: 3}
-  - {fileID: 3291775479710522400, guid: 0f57fb6c45a424f4c9883c72bdfc2cab, type: 3}
+  - {fileID: 3291775479710522400, guid: e027a32d416028d40a7e55666d04eb21, type: 3}
+  - {fileID: 3291775479710522400, guid: b8462674ae978544ead586260552615c, type: 3}
+  - {fileID: 3291775479710522400, guid: aae3915c14de1de46ad1c7b892a18774, type: 3}
+  - {fileID: 3291775479710522400, guid: 7f3e2f498f1904542a8579eb0a4f4d96, type: 3}
+  - {fileID: 3291775479710522400, guid: a88b4226d68be8d4e921448debb04d73, type: 3}
+  - {fileID: 3291775479710522400, guid: 6ac94c7116549e448af0162d47ac94aa, type: 3}
   "TypesLumi\xE8re":
   - {fileID: 3291775479710522400, guid: 32a56ef4b645cdf45818818805071a47, type: 3}
   tailleCarte: 16
@@ -2367,7 +2367,7 @@ MonoBehaviour:
   VideSlider: {fileID: 1346395650}
   LuminositeSlider: {fileID: 1405177007}
   GenerateButton: {fileID: 1731597215}
-  E_Room: {fileID: 3291775479710522400, guid: e027a32d416028d40a7e55666d04eb21, type: 3}
+  E_Room: {fileID: 3291775479710522400, guid: dd20841533e17724897c2f23dc7f792c, type: 3}
   B_Room: {fileID: 3291775479710522400, guid: bfc68ed84c1a4fb4bb33329fca3ded31, type: 3}
   SpawnRoom: {fileID: 3291775479710522400, guid: db7e9db0775b49944b17292be10b6759, type: 3}
   ExitRoom: {fileID: 3291775479710522400, guid: 8988967c1986e97479df96204fb63dda, type: 3}
